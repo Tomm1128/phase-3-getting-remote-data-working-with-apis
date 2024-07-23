@@ -1,18 +1,23 @@
 require 'net/http'
 require 'open-uri'
 require 'json'
- 
-class GetPrograms
 
-  URL = "http://data.cityofnewyork.us/resource/uvks-tn5n.json"
+class GetTypes
+  URL = "https://pokeapi.co/api/v2/pokemon/3/"
 
-  def get_programs
+  def get_pokemon
     uri = URI.parse(URL)
     response = Net::HTTP.get_response(uri)
     response.body
   end
 
+  def pokemon_types
+    pokemon = JSON.parse(self.get_pokemon)
+    pokemon["types"].map do |type|
+      type["type"]["name"]
+    end
+  end
 end
 
-programs = GetPrograms.new.get_programs
-puts programs
+pokemon = GetTypes.new
+pp pokemon.pokemon_types
